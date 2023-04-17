@@ -1,0 +1,37 @@
+/*
+
+Light Cream: #FDF5E6
+Warm Beige: #F5DEB3
+Soft Peach: #FFE4B5
+Dusty Rose: #DAA520
+Sage Green: #9DC183
+Muted Lavender: #B695C0
+Burgundy: #800020
+Forest Green: #228B22
+Navy Blue: #000080
+
+!important
+
+*/
+
+.colorLightCreamBG {
+	background-color: #FDF5E6;
+}
+
+.colorWarmBeigeBG {
+	background-color: #F5DEB3;
+}
+
+.colorSoftPeachBG {
+	background-color: #FFE4B5;
+}
+
+.colorBurgundy {
+	color: #800020;
+}
+
+nav .navbar-nav li a{
+	color: #800020 !important;
+	}
+
+        
