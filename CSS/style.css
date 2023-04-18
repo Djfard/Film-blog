@@ -9,6 +9,9 @@ Muted Lavender: #B695C0
 Burgundy: #800020
 Forest Green: #228B22
 Navy Blue: #000080
+#1C2833
+Light Cream: #FDF5E6
+
 
 !important
 
@@ -67,7 +70,7 @@ Navy Blue: #000080
   }
   
   a {
-	color: white;
+	color: black;
 	text-decoration: none;
   }
 
@@ -87,8 +90,12 @@ Navy Blue: #000080
 	color: #800020;
 }
 
+.colorNavBar {
+	background-color: #1C2833;
+}
+
 nav .navbar-nav li a{
-	color: #800020 !important;
+	color: #FDF5E6 !important;
 	}
 
 /*--------------------------------------------------------------
@@ -97,6 +104,15 @@ nav .navbar-nav li a{
 
 #about {
 	min-height: 100vh;
-	  width: 100%;
-	background-color: black;
+	width: 100%;
+	background-image: url(../BILDER/movie-minions.gif); 
+	background-size: cover; 
+	background-position: center; 
+	position: relative;
+}
+
+#about p {
+	border: 1px solid #000000;
+	font-size: 2.6rem;
+	color: #FDF5E6;
 }
