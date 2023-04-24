@@ -116,3 +116,41 @@ nav .navbar-nav li a{
 	font-size: 2.6rem;
 	color: #FDF5E6;
 }
+
+/*--------------------------------------------------------------
+# Top-Rated-Films
+--------------------------------------------------------------*/
+
+.card {
+	width: 100%;
+	max-width: 320px;
+}
+  
+  .card-title {
+	font-size: 1rem;
+	font-weight: bold;
+}
+  
+  .card-text {
+	font-size: 0.9rem;
+}
+
+#topRatedCarousel {
+	width: 100%;
+	max-width: 1600px;
+	margin: 0 auto;
+  }
+  
+  #topRatedCarousel .carousel-control-prev,
+  #topRatedCarousel .carousel-control-next {
+	width: 5%;
+  }
+  
+  #topRatedCarousel .carousel-control-prev {
+	left: -5%;
+  }
+  
+  #topRatedCarousel .carousel-control-next {
+	right: -5%;
+  }
+  
