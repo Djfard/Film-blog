@@ -28,50 +28,49 @@ function createCarouselItems(movies) {
 
   movies.forEach((movie) => {
       const movieCard = `
-          <div class="col-md-2">
-              <div class="card">
-                  <img src="${movie.Poster}" class="card-img-top" alt="${movie.Title}">
-                  <div class="card-body">
-                      <h6 class="card-title">${movie.Title}</h6>
-                      <p class="card-text">${movie.Plot.substring(0,70)}...</p>
-                      <p><strong>Rating:</strong> ${movie.imdbRating}</p>
-                    </div>
-                  </div>
+          <div class="card">
+              <img src="${movie.Poster}" class="card-img-top" alt="${movie.Title}">
+              <div class="card-body">
+                  <h6 class="card-title">${movie.Title}</h6>
+                  <p class="card-text">${movie.Plot.substring(0,70)}...</p>
+                  <p><strong>Rating:</strong> ${movie.imdbRating}</p>
                 </div>
-          `;
-          carousel.insertAdjacentHTML('beforeend', movieCard);
-      });
-  
-      $(carousel).slick({
-          slidesToShow: 5,
-          slidesToScroll: 1,
-          prevArrow: '<button type="button" class="slick-prev">Previous</button>',
-          nextArrow: '<button type="button" class="slick-next">Next</button>',
-          responsive: [
-              {
-                  breakpoint: 1024,
-                  settings: {
-                      slidesToShow: 3,
-                      slidesToScroll: 1,
-                  },
+          </div>
+      `;
+      carousel.insertAdjacentHTML('beforeend', movieCard);
+  });
+
+  $(carousel).slick({
+      slidesToShow: 5,
+      slidesToScroll: 1,
+      prevArrow: '<button type="button" class="slick-prev">Previous</button>',
+      nextArrow: '<button type="button" class="slick-next">Next</button>',
+      responsive: [
+          {
+              breakpoint: 1024,
+              settings: {
+                  slidesToShow: 3,
+                  slidesToScroll: 1,
               },
-              {
-                  breakpoint: 600,
-                  settings: {
-                      slidesToShow: 2,
-                      slidesToScroll: 1,
-                  },
+          },
+          {
+              breakpoint: 600,
+              settings: {
+                  slidesToShow: 2,
+                  slidesToScroll: 1,
               },
-              {
-                  breakpoint: 480,
-                  settings: {
-                      slidesToShow: 1,
-                      slidesToScroll: 1,
-                  },
+          },
+          {
+              breakpoint: 480,
+              settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
               },
-          ],
-      });
-  }
+          },
+      ],
+  });
+}
+
   
   (async function init() {
       const movies = await fetchTopRatedMovies();
