@@ -1,0 +1,39 @@
+body {
+    background-color: #EFEFEF;
+}
+
+.container {
+    overflow: hidden;
+}
+
+.titleColor {
+    color: #DC143C;
+}
+
+.btn-primary {
+    background-color: #1C2833;
+    border-color: #1C2833;
+}
+
+.btn-primary:hover {
+    background-color: #465362;
+    border-color: #465362;
+}
+
+.btn-secondary {
+    background-color: #1C2833;
+    border-color: #1C2833;
+}
+
+.btn-secondary:hover {
+    background-color: #465362;
+    border-color: #465362;
+}
+
+.error-message {
+    color: red;
+}
+
+.success-message {
+    color: green;
+}
