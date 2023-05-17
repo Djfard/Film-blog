@@ -52,3 +52,27 @@ topTenFilms.forEach(film => {
 filmSelect.addEventListener('change', function () {
     document.getElementById('review-film-name').value = this.options[this.selectedIndex].text;
 });
+
+
+document.getElementById('saveTheme').addEventListener('click', function () {
+    var themeSwitch = document.getElementById('themeSwitch');
+    if (themeSwitch.checked) {
+        document.documentElement.style.setProperty('--background-color', 'white');
+        document.cookie = 'theme=light; path=/; max-age=31536000';
+    } else {
+        document.documentElement.style.setProperty('--background-color', '#EFEFEF');
+        document.cookie = 'theme=grey; path=/; max-age=31536000';
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    var theme = document.cookie.split('; ').find(row => row.startsWith('theme')).split('=')[1];
+    if (theme == 'light') {
+        document.documentElement.style.setProperty('--background-color', 'white');
+        document.getElementById('themeSwitch').checked = true;
+    } else {
+        document.documentElement.style.setProperty('--background-color', '#EFEFEF');
+        document.getElementById('themeSwitch').checked = false;
+    }
+});
+

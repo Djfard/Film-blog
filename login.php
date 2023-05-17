@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'db_connection.php';
+include 'check_remember_me.php';
 
 $error_message = '';
 
@@ -25,6 +26,28 @@ if (isset($_POST['login'])) {
                 if (password_verify($password, $user['password'])) {
                     $_SESSION['user_id'] = $user['user_id'];
                     $_SESSION['username'] = $user['username'];
+                    $_SESSION['user_type'] = $user['user_type'];
+
+                    if (isset($_POST['remember-me']) && $_POST['remember-me'] == 'on') {
+                        $token = bin2hex(openssl_random_pseudo_bytes(24)); // generate a token
+                        setcookie('token', $token, time() + (86400 * 30), "/");
+
+                        // Set the expiration date/time for the token to 30 days from now
+                        $token_expires = date('Y-m-d H:i:s', time() + (86400 * 30));
+
+                        // Store the token and its expiration date/time in the database, associated with this user
+                        $stmt = $conn->prepare("UPDATE users SET remember_me_token=?, token_expires=? WHERE user_id=?");
+                        $stmt->bind_param('ssi', $token, $token_expires, $user['user_id']);
+                        $stmt->execute();
+                    } else {
+                        // Clear the token from the database and the user's cookies if "Remember me" is not checked
+                        $stmt = $conn->prepare("UPDATE users SET remember_me_token=NULL, token_expires=NULL WHERE user_id=?");
+                        $stmt->bind_param('i', $user['user_id']);
+                        $stmt->execute();
+
+                        setcookie('token', '', time() - 3600, "/");
+                    }
+
                     header('Location: profile.php');
                     exit;
                 } else {
@@ -37,6 +60,8 @@ if (isset($_POST['login'])) {
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -66,6 +91,12 @@ if (isset($_POST['login'])) {
                             <label for="password">Password:</label>
                             <input type="password" class="form-control" name="password" id="password" required>
                         </div>
+
+                        <div class="form-group">
+                            <input type="checkbox" id="remember-me" name="remember-me">
+                            <label for="remember-me">Remember me</label>
+                        </div>
+
                         <button type="submit" name="login" class="btn btn-primary btn-block">Login</button>
                     </form>
                     <hr>
@@ -75,6 +106,9 @@ if (isset($_POST['login'])) {
                 </div>
             </div>
         </div>
+
+        <script src="theme.js"></script>
+
     </body>
 
 </html>

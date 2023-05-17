@@ -11,6 +11,7 @@ if (isset($_POST['register'])) {
     $email = isset($_POST['email']) ? $conn->real_escape_string($_POST['email']) : null;
     $password = isset($_POST['password']) ? $conn->real_escape_string($_POST['password']) : null;
     $confirm_password = isset($_POST['confirm_password']) ? $conn->real_escape_string($_POST['confirm_password']) : null;
+    $user_type = isset($_POST['user_type']) ? $conn->real_escape_string($_POST['user_type']) : 'user';
 
     // Check if form fields are empty
     if (!$username || !$email || !$password || !$confirm_password) {
@@ -39,7 +40,7 @@ if (isset($_POST['register'])) {
                 } else {
                     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-                    $sql = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$hashed_password')";
+                    $sql = "INSERT INTO users (username, email, password, user_type) VALUES ('$username', '$email', '$hashed_password', '$user_type')";
 
                     if ($conn->query($sql) === TRUE) {
                         // Get the user_id of the registered user
@@ -48,6 +49,8 @@ if (isset($_POST['register'])) {
                         // Set session variables and redirect to profile page
                         $_SESSION['user_id'] = $user_id;
                         $_SESSION['username'] = $username;
+                        $_SESSION['user_type'] = $user_type;
+                        setcookie("username", $username, time() + (86400 * 30), "/");
                         $_SESSION['email'] = $email;
                         header("Location: profile.php");
                         exit();
@@ -101,6 +104,13 @@ if (isset($_POST['register'])) {
                             <input type="password" class="form-control" name="confirm_password" id="confirm_password"
                                 required>
                         </div>
+
+                        <label for="user_type">Account type:</label>
+                        <select name="user_type" id="user_type">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+
                         <button type="submit" name="register" class="btn btn-primary btn-block">Register</button>
                     </form>
                     <hr>
@@ -110,6 +120,9 @@ if (isset($_POST['register'])) {
                 </div>
             </div>
         </div>
+
+        <script src="theme.js"></script>
+
     </body>
 
 </html>

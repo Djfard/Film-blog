@@ -1,5 +1,7 @@
 <?php
+session_start();
 include 'db_connection.php';
+include 'check_remember_me.php';
 
 $sql = "SELECT reviews.*, users.username FROM reviews INNER JOIN users ON reviews.user_id=users.user_id ORDER BY review_date DESC LIMIT 10";
 $result = $conn->query($sql);
@@ -105,6 +107,7 @@ $result = $conn->query($sql);
 
 
     <script src="script.js"></script>
+    <script src="theme.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"

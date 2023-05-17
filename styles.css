@@ -38,10 +38,14 @@ html {
   font-size: 62.5%;
 }
 
+:root {
+  --background-color: white;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   position: relative;
-  background-color: #EFEFEF !important;
+  background-color: var(--background-color) !important;
 }
 
 h1 {
@@ -320,4 +324,46 @@ textarea#review-content {
   font-size: 1.6rem;
   text-align: center;
   width: 100%;
+}
+
+.theme-modal-title {
+  font-size: 1.5rem !important;
+}
+
+.theme-modal-close {
+  font-size: 1.5rem !important;
+}
+
+.theme-modal-text {
+  font-size: 1.25rem !important;
+}
+
+.theme-modal-switch {
+  width: 1.5em !important;
+  height: 1.5em !important;
+}
+
+.theme-modal-button {
+  padding: 0.5rem 1rem !important;
+  font-size: 1.25rem !important;
+}
+
+#themeModal .form-check-label {
+  font-size: 1.5rem !important;
+  margin-right: 1rem !important;
+}
+
+#themeModal .form-check-input {
+  width: 3rem !important;
+  height: 3rem !important;
+  margin: 0 1rem !important;
+}
+
+#themeModal .btn {
+  font-size: 1.2rem !important;
+}
+
+#themeModal .modal-footer .btn {
+  width: 40% !important;
+  margin: 0 5% !important;
 }

@@ -1,13 +1,34 @@
 <?php
 session_start();
+include 'db_connection.php';
+include 'check_remember_me.php';
+
+if (!isset($_SESSION['username']) && isset($_COOKIE['username'])) {
+  $_SESSION['username'] = $_COOKIE['username'];
+  $sql = "SELECT user_id, email, user_type FROM users WHERE username = '{$_COOKIE['username']}'";
+  $result = $conn->query($sql);
+  if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+    $_SESSION['user_id'] = $user['user_id'];
+    $_SESSION['email'] = $user['email'];
+    $_SESSION['user_type'] = $user['user_type'];
+  }
+} elseif (isset($_SESSION['username']) && !isset($_SESSION['user_type'])) {
+  $sql = "SELECT user_type FROM users WHERE username = '{$_SESSION['username']}'";
+  $result = $conn->query($sql);
+  if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+    $_SESSION['user_type'] = $user['user_type'];
+  }
+}
 
 if (!isset($_SESSION['user_id'])) {
   header('Location: login.php');
   exit;
 }
-
-include 'db_connection.php';
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -50,10 +71,15 @@ include 'db_connection.php';
         <div class="navbar-end">
           <ul class="navbar-nav fs-4">
             <li class="nav-item">
+              <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#themeModal"><i
+                  class="fas fa-paint-brush" style="color: white;"></i></a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt" style="color: white;"></i></a>
             </li>
           </ul>
         </div>
+
       </div>
     </nav>
 
@@ -111,6 +137,13 @@ include 'db_connection.php';
               echo "<h6 class='card-subtitle mb-2 text-muted'>Rating: " . $row['rating'] . "/5</h6>";
               echo "<p class='card-text card-content' style='color: #333333;'>" . $row['content'] . "</p>";
               echo "<p class='card-text card-date'><small class='text-muted'>Date: " . $row['review_date'] . "</small></p>";
+              echo "<form action='delete_review.php' method='POST'>";
+              echo "<input type='hidden' name='review_id' value='" . $row['review_id'] . "'>";
+              echo "<input type='submit' value='Delete Review' class='btn btn-danger'>";
+              echo "</form>";
+              echo "<form action='edit_review.php' method='POST'>";
+              echo "<input type='hidden' name='review_id' value='" . $row['review_id'] . "'>";
+              echo "</form>";
               echo "</div>";
               echo "</div>";
             }
@@ -118,6 +151,7 @@ include 'db_connection.php';
             echo "<p class='no-reviews text-center'>No reviews found!</p>";
           }
           ?>
+
         </div>
 
         <div class="col-md-6 ps-5">
@@ -136,6 +170,15 @@ include 'db_connection.php';
               echo "<h6 class='card-subtitle mb-2 text-muted'>Rating: " . $row['rating'] . "/5</h6>";
               echo "<p class='card-text card-content' style='color: #333333;'>" . $row['content'] . "</p>";
               echo "<p class='card-text card-date'><small class='text-muted'>Date: " . $row['review_date'] . "</small></p>";
+
+              // If the user is an admin, echo out the delete button
+              if ($_SESSION['user_type'] === 'admin') {
+                echo "<form action='delete_review.php' method='post'>";
+                echo "<input type='hidden' name='review_id' value='{$row['review_id']}'>";
+                echo "<input type='submit' name='delete-review' value='Delete Review' class='btn btn-danger'>";
+                echo "</form>";
+              }
+
               echo "</div>";
               echo "</div>";
             }
@@ -144,11 +187,51 @@ include 'db_connection.php';
           }
           ?>
 
+
         </div>
       </div>
     </section>
 
-    <footer class="footer mt-3 py-4 bg-dark">
+    <div class="container text-center mt-3 mb-3">
+      <form action="delete_account.php" method="POST">
+        <input type="submit" value="Delete Account" class="btn btn-danger btn-large">
+      </form>
+    </div>
+
+    <?php if ($_SESSION['user_type'] === 'admin'): ?>
+      <div class="d-grid gap-2">
+        <a href="admin_users.php" class="btn btn-primary" target="_blank">View All Users</a>
+      </div>
+    <?php endif; ?>
+
+    <!-- Theme Modal -->
+    <div class="modal fade" id="themeModal" tabindex="-1" aria-labelledby="themeModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title theme-modal-title" id="themeModalLabel">Choose Your Theme</h5>
+            <button type="button" class="btn-close theme-modal-close" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body d-flex justify-content-center align-items-center">
+            <div class="form-check form-switch d-flex align-items-center justify-content-between theme-modal-text">
+              <label class="form-check-label me-2" for="themeSwitch">Grey</label>
+              <input class="form-check-input theme-modal-switch" type="checkbox" id="themeSwitch">
+              <label class="form-check-label ms-2" for="themeSwitch">Light</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary theme-modal-button" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary theme-modal-button" id="saveTheme">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <footer class="footer py-4 bg-dark">
       <div class="container text-center text-white">
         <span>Educational purposes only! No rights owned!</span><br>
         <a href="https://www.imdb.com/" class="text-white" target="_blank">IMDB</a> |
@@ -159,6 +242,7 @@ include 'db_connection.php';
     </footer>
 
     <script src="profile.js"></script>
+    <script src="theme.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
